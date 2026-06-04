@@ -87,6 +87,117 @@ All processing is client-side - images never leave the browser.
 
 - `index.html` - Contains all HTML, CSS, and JavaScript for the app
 
+## Conventions & Patterns
+
+This is a single-file vanilla JS project with no build step. Keep it that way. The rules below preserve the intentional simplicity and the ServiceNow KB compliance guarantees.
+
+### Core behaviours
+
+**Preserve aspect ratio by default.** Never stretch images. Calculate which dimension is the constraint based on aspect ratio vs bounding box ratio.
+
+**Use Pica for quality resizing.** Canvas `imageSmoothingQuality: 'high'` is inadequate for significant size changes. Always use the Pica instance for final output.
+
+**Read inputs at execution time.** For debounced async operations, read dimension values inside `doResize()`, not when scheduling the timeout. Stale values captured at scheduling time is a prior bug.
+
+**Proxy API keys server-side.** Never expose `BRANDFETCH_API_KEY` to the browser. All calls go through `/api/brandfetch` (Cloudflare Pages Function).
+
+**Validate Brandfetch image URLs.** The image proxy only allows URLs containing `brandfetch.io` or `asset.brandfetch` — security guardrail against arbitrary URL fetching.
+
+**`textContent` not `innerHTML`.** All DOM updates with user data use `textContent` to prevent XSS.
+
+**Maintain SRI on CDN scripts.** If updating Pica version, regenerate the integrity hash:
+```bash
+curl -s [URL] | openssl dgst -sha384 -binary | openssl base64 -A
+```
+
+### Decision framework
+
+**IF adding a new resize preset** → add to preset definitions in JS; use `maxWidth`/`maxHeight` (bounding box, not fixed); add buttons to both columns' preset groups.
+
+**IF modifying image processing logic** → test with extreme aspect ratios (wide banners, tall images); test debouncing — rapid dimension changes should not produce wrong results; check both columns use the same `resizeForPreset()` function.
+
+**IF adding a new export format** → Canvas API only exports PNG and JPEG (not GIF); GIF selection falls back to PNG export.
+
+**IF modifying the API proxy** → maintain CORS headers on all responses, including errors; handle OPTIONS preflight; keep the URL allowlist for the image proxy endpoint.
+
+**IF updating security headers** → edit `_headers` (Cloudflare Pages format); test that CSP doesn't break Pica CDN loading; verify changes at securityheaders.com after deploy.
+
+### Key patterns
+
+**Fit within bounding box calculation:**
+```javascript
+const aspectRatio = originalWidth / originalHeight;
+const boxRatio = maxWidth / maxHeight;
+
+if (aspectRatio > boxRatio) {
+  // Image wider than box — constrain by width
+  newWidth = maxWidth;
+  newHeight = Math.round(maxWidth / aspectRatio);
+} else {
+  // Image taller than box — constrain by height
+  newHeight = maxHeight;
+  newWidth = Math.round(maxHeight * aspectRatio);
+}
+```
+
+**Debounced async resize with re-run flag:**
+```javascript
+let resizeTimeout = null;
+let isResizing = false;
+let pendingResize = false;
+
+function updatePreview() {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(doResize, 150);
+}
+
+async function doResize() {
+  if (isResizing) { pendingResize = true; return; }
+  isResizing = true;
+  const dims = getCurrentDimensions();  // read HERE, not when scheduling
+  await picaInstance.resize(/* ... */);
+  isResizing = false;
+  if (pendingResize) { pendingResize = false; doResize(); }
+}
+```
+
+**Clipboard paste handling:**
+```javascript
+document.addEventListener('paste', (e) => {
+  for (const item of e.clipboardData.items) {
+    if (item.type.startsWith('image/')) {
+      processFile(item.getAsFile());
+    }
+  }
+});
+```
+
+**Pages Function structure:**
+```javascript
+export async function onRequest(context) {
+  const { request, env } = context;
+  // env.BRANDFETCH_API_KEY contains the secret
+  // Return Response objects with CORS headers
+}
+```
+
+### Critical reminders
+
+- Test aspect ratio preservation with extreme dimensions (e.g., 6394×1158 banner). A prior bug squashed images at these ratios.
+- Read dimension values at execution time in `doResize()`, not when scheduling the timeout. Prior bug: rapid changes produced wrong final results because stale values were captured at scheduling.
+- Canvas API cannot export GIF. When GIF is selected, the code exports as PNG instead.
+
+### Don'ts
+
+- Don't use `innerHTML` with user-provided data — XSS risk
+- Don't put API keys in client-side code — use the Pages Function proxy
+- Don't allow arbitrary URLs in the image proxy — only `brandfetch.io` domains
+- Don't stretch images to exact preset dimensions — always preserve aspect ratio
+- Don't skip SRI hashes on CDN scripts — supply chain attack risk
+- Don't add build steps — the single-file architecture is intentional
+- Don't split into separate JS/CSS files — single-file is the design
+- Don't use Canvas resize for final output — always Pica for quality
+
 ## Learning Documentation
 
 For every project, write a detailed FORKIERAN.md file that explains the whole project in plain language.
