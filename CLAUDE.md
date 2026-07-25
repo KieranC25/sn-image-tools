@@ -40,6 +40,13 @@ All image processing happens client-side via Pica (Lanczos3 resampling). API req
 - **Deployment**: Cloudflare Pages
 - **Build**: None required - pure static files + Functions
 
+**Cloudflare docs.** context7 first for ordinary API/CLI/config questions. For exhaustive or
+citable answers, fetch Cloudflare's own markdown: `developers.cloudflare.com/llms.txt` (master
+index) → `<product>/llms.txt` → `<product>/llms-full.txt`; `<path>/index.md` gives one page (works
+on most paths — check the body is frontmatter, not `<!DOCTYPE html>`). Don't clone
+`cloudflare/cloudflare-docs`; the published markdown is its rendered output. Fetch recipe,
+caveats and estate map: `wiki:concepts/cloudflare-docs-index`.
+
 ## Project Structure
 
 ```
