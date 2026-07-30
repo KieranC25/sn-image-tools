@@ -1441,7 +1441,13 @@
       filenameInput.value = sanitizeFilename(defaultName);
 
       const type = file.type.split('/')[1];
-      originalFormat = type === 'jpeg' ? 'jpeg' : type === 'gif' ? 'gif' : 'png';
+      if (type === 'jpeg') {
+        originalFormat = 'jpeg';
+      } else if (type === 'gif') {
+        originalFormat = 'gif';
+      } else {
+        originalFormat = 'png';
+      }
 
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -1583,8 +1589,8 @@
     }
 
     function checkUpscale() {
-      const width = parseInt(widthInput.value) || 0;
-      const height = parseInt(heightInput.value) || 0;
+      const width = Number.parseInt(widthInput.value) || 0;
+      const height = Number.parseInt(heightInput.value) || 0;
       const isUpscaling = width > originalWidth || height > originalHeight;
       upscaleWarning.classList.toggle('visible', isUpscaling);
     }
@@ -1597,8 +1603,8 @@
     function updatePreview() {
       if (!originalImage) return;
 
-      let width = parseInt(widthInput.value) || originalWidth;
-      let height = parseInt(heightInput.value) || originalHeight;
+      let width = Number.parseInt(widthInput.value) || originalWidth;
+      let height = Number.parseInt(heightInput.value) || originalHeight;
 
       if (padToFit.checked) {
         const preset = presets[presetSelect.value];
@@ -1630,8 +1636,8 @@
       pendingResize = false;
       previewContainer.classList.add('loading');
 
-      const fitWidth = parseInt(widthInput.value) || originalWidth;
-      const fitHeight = parseInt(heightInput.value) || originalHeight;
+      const fitWidth = Number.parseInt(widthInput.value) || originalWidth;
+      const fitHeight = Number.parseInt(heightInput.value) || originalHeight;
       const format = formatSelect.value === 'original' ? originalFormat : formatSelect.value;
       const shouldPad = padToFit.checked;
       const preset = presets[presetSelect.value];
@@ -2190,8 +2196,8 @@
     });
 
     function brandCheckUpscale() {
-      const width = parseInt(brandWidthInput.value) || 0;
-      const height = parseInt(brandHeightInput.value) || 0;
+      const width = Number.parseInt(brandWidthInput.value) || 0;
+      const height = Number.parseInt(brandHeightInput.value) || 0;
       const isUpscaling = width > brandOriginalWidth || height > brandOriginalHeight;
       brandUpscaleWarning.classList.toggle('visible', isUpscaling);
     }
@@ -2204,8 +2210,8 @@
     function brandUpdatePreview() {
       if (!brandImage) return;
 
-      let width = parseInt(brandWidthInput.value) || brandOriginalWidth;
-      let height = parseInt(brandHeightInput.value) || brandOriginalHeight;
+      let width = Number.parseInt(brandWidthInput.value) || brandOriginalWidth;
+      let height = Number.parseInt(brandHeightInput.value) || brandOriginalHeight;
 
       if (brandPadToFit.checked) {
         const preset = presets[brandPresetSelect.value];
@@ -2237,8 +2243,8 @@
       brandPendingResize = false;
       brandPreviewContainer.classList.add('loading');
 
-      const fitWidth = parseInt(brandWidthInput.value) || brandOriginalWidth;
-      const fitHeight = parseInt(brandHeightInput.value) || brandOriginalHeight;
+      const fitWidth = Number.parseInt(brandWidthInput.value) || brandOriginalWidth;
+      const fitHeight = Number.parseInt(brandHeightInput.value) || brandOriginalHeight;
       const format = brandFormatSelect.value;
       const shouldPad = brandPadToFit.checked;
       const preset = presets[brandPresetSelect.value];
