@@ -907,7 +907,7 @@
 
         <div class="card">
           <div class="dropzone" id="dropZone">
-            <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.gif,image/png,image/jpeg,image/gif">
+            <input type="file" id="fileInput" accept=".png,.jpg,.jpeg,.gif,image/png,image/jpeg,image/gif" aria-labelledby="fileInputLabel">
             <div class="dropzone-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -915,7 +915,7 @@
                 <line x1="12" y1="3" x2="12" y2="15"/>
               </svg>
             </div>
-            <h3>Choose a file or drag it here</h3>
+            <h3 id="fileInputLabel">Choose a file or drag it here</h3>
             <p>You can also paste from clipboard</p>
             <div class="file-types">
               <span>PNG</span><span>JPG</span><span>GIF</span>
@@ -928,7 +928,7 @@
 
           <div class="controls" id="controls" style="margin-top: 1rem;">
             <div class="control-row">
-              <label>Preset</label>
+              <label for="presetSelect">Preset</label>
               <select id="presetSelect">
                 <option value="thumbnail">Thumbnail (max 150 &times; 150)</option>
                 <option value="medium">Medium (max 300 &times; 200)</option>
@@ -940,7 +940,7 @@
             </div>
 
             <div class="control-row" id="padRow">
-              <label></label>
+              <label for="padToFit" aria-hidden="true"><span hidden>Pad to exact size</span></label>
               <div class="checkbox-row">
                 <input type="checkbox" id="padToFit">
                 <label for="padToFit">Pad to exact size</label>
@@ -948,7 +948,7 @@
             </div>
 
             <div class="control-row hidden" id="bgColorRow">
-              <label>Background</label>
+              <label for="bgCustom">Background</label>
               <div class="bg-options">
                 <button type="button" class="bg-option active" id="bgAuto" data-bg="auto">Auto-detect</button>
                 <button type="button" class="bg-option" id="bgWhite" data-bg="#ffffff">White</button>
@@ -963,16 +963,16 @@
             </div>
 
             <div class="control-row hidden" id="customDimensions">
-              <label>Size</label>
+              <label for="widthInput">Size</label>
               <div class="dimensions">
-                <input type="number" id="widthInput" placeholder="Width" min="1">
+                <input type="number" id="widthInput" placeholder="Width" min="1" aria-label="Width (px)">
                 <span>&times;</span>
-                <input type="number" id="heightInput" placeholder="Height" min="1">
+                <input type="number" id="heightInput" placeholder="Height" min="1" aria-label="Height (px)">
               </div>
             </div>
 
             <div class="control-row hidden" id="aspectRow">
-              <label></label>
+              <label for="lockAspect" aria-hidden="true"><span hidden>Lock aspect ratio</span></label>
               <div class="checkbox-row">
                 <input type="checkbox" id="lockAspect" checked>
                 <label for="lockAspect">Lock aspect ratio</label>
@@ -980,7 +980,7 @@
             </div>
 
             <div class="control-row">
-              <label>Format</label>
+              <label for="formatSelect">Format</label>
               <select id="formatSelect">
                 <option value="original">Same as original</option>
                 <option value="png">PNG (best for screenshots/graphics)</option>
@@ -989,7 +989,7 @@
             </div>
 
             <div class="control-row">
-              <label>Filename</label>
+              <label for="filenameInput">Filename</label>
               <input type="text" id="filenameInput" placeholder="image-name">
             </div>
             <p class="help-text">Letters, numbers, hyphens, and underscores only</p>
@@ -1081,9 +1081,9 @@
               </svg>
             </div>
             <h3>Search for brand logos</h3>
-            <p>Enter a company name or domain</p>
+            <p id="brandSearchLabel">Enter a company name or domain</p>
             <div class="search-box" style="margin-top: 1.25rem;">
-              <input type="text" id="brandSearch" placeholder="e.g. Microsoft, apple.com...">
+              <input type="text" id="brandSearch" placeholder="e.g. Microsoft, apple.com..." aria-labelledby="brandSearchLabel">
               <button class="btn btn-primary" id="searchBtn">Search</button>
             </div>
             <p class="api-notice" style="margin-top: 1rem;">Logos powered by <a href="https://brandfetch.com" target="_blank" rel="noopener">Brandfetch</a></p>
@@ -1092,10 +1092,10 @@
         </div>
 
         <div class="card" id="apiKeyCard">
-          <h3 style="margin: 0 0 0.5rem 0; font-size: 1rem;">Brandfetch API Key</h3>
+          <h3 id="userApiKeyLabel" style="margin: 0 0 0.5rem 0; font-size: 1rem;">Brandfetch API Key</h3>
           <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0 0 0.75rem 0;">Brand logo search requires an API key. Get a free one from <a href="https://developers.brandfetch.com" target="_blank" rel="noopener">developers.brandfetch.com</a>, then paste it below.</p>
           <div style="display: flex; gap: 0.5rem; align-items: center;">
-            <input type="password" id="userApiKey" placeholder="Paste your Brandfetch API key" style="flex:1;padding:0.5rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;background:var(--surface);color:var(--text);">
+            <input type="password" id="userApiKey" placeholder="Paste your Brandfetch API key" aria-labelledby="userApiKeyLabel" style="flex:1;padding:0.5rem;border:1px solid var(--border);border-radius:6px;font-size:0.85rem;background:var(--surface);color:var(--text);">
             <button class="btn" id="toggleApiKeyVisibility" style="padding:0.5rem 0.75rem;font-size:0.8rem;white-space:nowrap;">Show</button>
           </div>
           <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 0.5rem 0 0 0;">Your key is stored in your browser only and never logged.</p>
@@ -1121,7 +1121,7 @@
 
           <div class="controls visible" id="brandControls" style="margin-top: 1rem;">
             <div class="control-row">
-              <label>Preset</label>
+              <label for="brandPresetSelect">Preset</label>
               <select id="brandPresetSelect">
                 <option value="thumbnail">Thumbnail (max 150 &times; 150)</option>
                 <option value="medium">Medium (max 300 &times; 200)</option>
@@ -1133,7 +1133,7 @@
             </div>
 
             <div class="control-row" id="brandPadRow">
-              <label></label>
+              <label for="brandPadToFit" aria-hidden="true"><span hidden>Pad to exact size</span></label>
               <div class="checkbox-row">
                 <input type="checkbox" id="brandPadToFit">
                 <label for="brandPadToFit">Pad to exact size</label>
@@ -1141,7 +1141,7 @@
             </div>
 
             <div class="control-row hidden" id="brandBgColorRow">
-              <label>Background</label>
+              <label for="brandBgCustom">Background</label>
               <div class="bg-options">
                 <button type="button" class="bg-option active" id="brandBgAuto" data-bg="auto">Auto-detect</button>
                 <button type="button" class="bg-option" id="brandBgWhite" data-bg="#ffffff">White</button>
@@ -1155,16 +1155,16 @@
             </div>
 
             <div class="control-row hidden" id="brandCustomDimensions">
-              <label>Size</label>
+              <label for="brandWidthInput">Size</label>
               <div class="dimensions">
-                <input type="number" id="brandWidthInput" placeholder="Width" min="1">
+                <input type="number" id="brandWidthInput" placeholder="Width" min="1" aria-label="Width (px)">
                 <span>&times;</span>
-                <input type="number" id="brandHeightInput" placeholder="Height" min="1">
+                <input type="number" id="brandHeightInput" placeholder="Height" min="1" aria-label="Height (px)">
               </div>
             </div>
 
             <div class="control-row hidden" id="brandAspectRow">
-              <label></label>
+              <label for="brandLockAspect" aria-hidden="true"><span hidden>Lock aspect ratio</span></label>
               <div class="checkbox-row">
                 <input type="checkbox" id="brandLockAspect" checked>
                 <label for="brandLockAspect">Lock aspect ratio</label>
@@ -1172,7 +1172,7 @@
             </div>
 
             <div class="control-row">
-              <label>Format</label>
+              <label for="brandFormatSelect">Format</label>
               <select id="brandFormatSelect">
                 <option value="png">PNG (best for logos)</option>
                 <option value="jpeg">JPG (smaller file size)</option>
@@ -1180,7 +1180,7 @@
             </div>
 
             <div class="control-row">
-              <label>Filename</label>
+              <label for="brandFilenameInput">Filename</label>
               <input type="text" id="brandFilenameInput" placeholder="brand-logo">
             </div>
             <p class="help-text">Letters, numbers, hyphens, and underscores only</p>
