@@ -57,7 +57,6 @@ caveats and estate map: `wiki:concepts/cloudflare-docs-index`.
 │   └── api/
 │       └── brandfetch.js  # Cloudflare Pages Function to proxy Brandfetch API
 ├── CLAUDE.md            # This file
-├── FORKIERAN.md         # Learning documentation
 └── wrangler.toml        # Cloudflare Pages configuration (optional)
 ```
 
@@ -205,25 +204,12 @@ export async function onRequest(context) {
 - Don't split into separate JS/CSS files — single-file is the design
 - Don't use Canvas resize for final output — always Pica for quality
 
-## Learning Documentation
+## Decisions and lessons
 
-For every project, write a detailed FORKIERAN.md file that explains the whole project in plain language.
-
-Explain the technical architecture, the structure of the codebase and how the various parts are connected, the technologies used, why we made these technical decisions, and lessons I can learn from it (this should include the bugs we ran into and how we fixed them, potential pitfalls and how to avoid them in the future, new technologies used, how good engineers think and work, best practices, etc).
-
-It should be very engaging to read; don't make it sound like boring technical documentation/textbook. Where appropriate, use analogies and anecdotes to make it more understandable and memorable.
-
-### When to Update These Files
+Record decisions and lessons (bugs fixed, why a choice was made, pitfalls) in the wiki article `projects/sn-image-tools` §Decisions and lessons. FORKIERAN.md was retired on 2026-10-03; git history keeps the old file.
 
 **Update CLAUDE.md when:**
 - Project structure changes significantly
 - New major dependencies are added
 - Common commands change
 - Architecture evolves
-
-**Update FORKIERAN.md when:**
-- A bug is fixed (add to "Bugs and Lessons Learned")
-- A feature is completed (update architecture/patterns sections)
-- A best practice emerges from the work
-- You learn something worth remembering
-- At the end of significant work sessions
