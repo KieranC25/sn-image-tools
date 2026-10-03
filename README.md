@@ -66,8 +66,7 @@ npx wrangler pages dev . --binding BRANDFETCH_API_KEY=your-api-key
 │   └── api/
 │       └── brandfetch.js   # API proxy for Brandfetch
 ├── wrangler.toml           # Cloudflare Pages config
-├── CLAUDE.md               # AI assistant instructions
-└── FORKIERAN.md            # Learning documentation
+└── CLAUDE.md               # AI assistant instructions
 ```
 
 ## Development
