@@ -66,7 +66,8 @@ npx wrangler pages dev . --binding BRANDFETCH_API_KEY=your-api-key
 │   └── api/
 │       └── brandfetch.js   # API proxy for Brandfetch
 ├── wrangler.toml           # Cloudflare Pages config
-└── CLAUDE.md               # AI assistant instructions
+├── AGENTS.md               # Shared agent instructions
+└── FORKIERAN.md            # Read-only decisions archive
 ```
 
 ## Development
@@ -88,25 +89,19 @@ npx wrangler pages dev . --binding BRANDFETCH_API_KEY=your-key
 
 ## Deployment
 
-### Cloudflare Pages (Recommended)
+### Cloudflare Pages
 
-1. **Connect Repository**
-   - Go to Cloudflare Pages dashboard
-   - Create new project → Connect to Git
-   - Select this repository
+The live `servicenow-image-resizer` Pages project uses manual direct upload. Pushing to Git does not deploy this site. Configure `BRANDFETCH_API_KEY` in the Pages project's environment variables if you want a server-side fallback key.
 
-2. **Configure Build**
-   - Build command: (leave empty)
-   - Build output directory: `/`
+Stage the public files before deploying. Do not deploy `.`: that would also publish repository documentation and Git metadata.
 
-3. **Set Environment Variable**
-   - Settings → Environment variables
-   - Add `BRANDFETCH_API_KEY` with your API key
-
-### Manual Deploy
 ```bash
-npx wrangler pages deploy . --project-name=sn-image-tools
+mkdir -p dist
+cp index.html _headers dist/
+npx wrangler@4 pages deploy dist --project-name servicenow-image-resizer --branch main
 ```
+
+Run the command from the repository root so Wrangler includes `functions/`. Verify the new deployment and the changed behaviour on the live site.
 
 ## Security
 
